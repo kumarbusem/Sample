@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.busem.sample.R
 import com.busem.sample.common.setUrlSource
-import com.busem.sample.data.models.Repository
+import com.busem.data.models.Repository
 import com.busem.sample.databinding.ItemRepositoryBinding
 
 class RepositoriesAdapter(

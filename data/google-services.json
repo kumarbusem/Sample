@@ -1,0 +1,98 @@
+{
+  "project_info": {
+    "project_number": "224605814962",
+    "firebase_url": "https://edrider-21.firebaseio.com",
+    "project_id": "edrider-21",
+    "storage_bucket": "edrider-21.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:224605814962:android:311579c66d348fbda7c9ab",
+        "android_client_info": {
+          "package_name": "com.tekkr.data"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "224605814962-pslbu3r5031q94m00qehnr9bv0n39hre.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyANu76KJZTjLgEC3FCC2hhTkwDn0h4Dh5I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "224605814962-pslbu3r5031q94m00qehnr9bv0n39hre.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:224605814962:android:f05fc7382165a9a1a7c9ab",
+        "android_client_info": {
+          "package_name": "com.tekkr.edrider"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "224605814962-pslbu3r5031q94m00qehnr9bv0n39hre.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyANu76KJZTjLgEC3FCC2hhTkwDn0h4Dh5I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "224605814962-pslbu3r5031q94m00qehnr9bv0n39hre.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:224605814962:android:f05fc7382165a9a1a7c9ab",
+        "android_client_info": {
+          "package_name": "com.tekkr.edrider.dev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "224605814962-pslbu3r5031q94m00qehnr9bv0n39hre.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyANu76KJZTjLgEC3FCC2hhTkwDn0h4Dh5I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "224605814962-pslbu3r5031q94m00qehnr9bv0n39hre.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

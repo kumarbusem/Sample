@@ -3,7 +3,7 @@ package com.busem.sample.features.splash.viewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.busem.sample.common.BaseViewModel
-import com.busem.sample.data.repositories.UserRepo
+import com.busem.data.repositories.UserRepo
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 

@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import com.busem.sample.R
 import com.busem.sample.common.BaseActivity
 import com.busem.sample.common.toast
-import com.busem.sample.data.models.Repository
+import com.busem.data.models.Repository
 import com.busem.sample.databinding.ActivityHomeBinding
 import com.busem.sample.features.home.adapters.RepositoriesAdapter
 import com.busem.sample.features.home.viewModels.HomeViewModel

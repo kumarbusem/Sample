@@ -1,12 +1,13 @@
 package com.busem.sample.features.home.viewModels
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.busem.data.common.DataState
+import com.busem.data.models.Repository
+import com.busem.data.repositories.GithubRepo
 import com.busem.sample.common.BaseViewModel
-import com.busem.sample.common.EMPTY_STRING
 import com.busem.sample.common.SingleLiveEvent
-import com.busem.sample.data.models.Repository
-import com.busem.sample.data.repositories.GithubRepo
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -21,17 +22,15 @@ class HomeViewModel : BaseViewModel() {
 
     fun searchResults(searchTerm: String) {
         _searchTerm.postValue(searchTerm)
+
         ioScope.launch {
-            withContext(ioScope.coroutineContext) {
-                githubRepo.fetchRepositories(
-                    searchTerm
-                )
-            }?.let { repos ->
-                _repos.postValue(repos)
-                return@let
-            } ?: run {
-                _repos.postValue(githubRepo.getRepositories(searchTerm))
-                return@run
+            when (val dataState = githubRepo.fetchRepositories(searchTerm)) {
+                is DataState.Success -> {
+                    _repos.postValue(dataState.data)
+                }
+                is DataState.Error ->{
+                    _repos.postValue(githubRepo.getRepositories(searchTerm))
+                }
             }
         }
     }
@@ -39,7 +38,7 @@ class HomeViewModel : BaseViewModel() {
     fun toggleFavorite(data: Repository) {
         ioScope.launch {
             githubRepo.saveRepository(data)
-            _repos.postValue(githubRepo.getRepositories(_searchTerm.value ?: EMPTY_STRING))
+            _repos.postValue(githubRepo.getRepositories(_searchTerm.value ?: ""))
         }
     }
 }
