@@ -4,16 +4,14 @@ import android.content.ContentProvider
 import android.content.ContentValues
 import android.database.Cursor
 import android.net.Uri
-import android.util.Log
 import com.busem.data.local.CacheProvider
-import com.busem.data.local.sharedPrefs.SharedPreferenceHelper
+import com.busem.data.sharedPrefs.SharedPreferenceHelper
 import com.busem.data.remote.ServiceProvider
 
 
 internal class ContextProvider : ContentProvider() {
 
     override fun onCreate(): Boolean {
-
 
         context?.let { context ->
             SharedPreferenceHelper.initialize(context)

@@ -1,10 +1,7 @@
 package com.busem.data.remote
 
 import android.content.Context
-import androidx.room.Room
 import com.busem.data.common.BASE_URL
-import com.busem.data.local.CacheProvider
-import com.busem.data.local.GithubDatabase
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

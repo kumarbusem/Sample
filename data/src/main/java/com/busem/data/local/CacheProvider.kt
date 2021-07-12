@@ -17,7 +17,7 @@ object CacheProvider {
             setup = Room.databaseBuilder(
                 context,
                 GithubDatabase::class.java,
-                CacheProvider.DATABASE_NAME
+                DATABASE_NAME
             ).build()
         }
     }

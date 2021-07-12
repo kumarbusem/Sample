@@ -2,16 +2,14 @@ package com.busem.data.repositories
 
 import com.busem.data.common.DataState
 import com.busem.data.common.EMPTY_STRING
-import com.busem.data.local.dataSources.CacheDataSource
+import com.busem.data.local.dataSources.LocalGitDataSourceImpl
 import com.busem.data.models.RemoteRepository
 import com.busem.data.models.Repository
 import com.busem.data.remote.RetrofitDataSourceImpl
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 
 class GithubRepo {
 
-    private val cache = CacheDataSource()
+    private val cache = LocalGitDataSourceImpl()
     private val remote = RetrofitDataSourceImpl()
 
     suspend fun fetchRepositories(searchKey: String): DataState<List<Repository>?>? {

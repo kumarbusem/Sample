@@ -1,4 +1,4 @@
-package com.busem.data.local.sharedPrefs
+package com.busem.data.sharedPrefs
 
 import android.content.Context
 import android.content.SharedPreferences

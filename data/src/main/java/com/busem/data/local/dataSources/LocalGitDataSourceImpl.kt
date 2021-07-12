@@ -3,7 +3,7 @@ package com.busem.data.local.dataSources
 import com.busem.data.local.CacheProvider
 import com.busem.data.models.Repository
 
-class CacheDataSource : LocalGitDataSource {
+class LocalGitDataSourceImpl : LocalGitDataSource {
 
     private val cache = CacheProvider.getInstance().githubDao()
 
