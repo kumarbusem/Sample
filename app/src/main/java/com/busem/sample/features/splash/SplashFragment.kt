@@ -28,7 +28,6 @@ class SplashFragment : BaseAbstractFragment<SplashViewModel, FragmentSplashBindi
         }
     }
 
-
     private fun navigateToAccessScreen() {
         navigateById(R.id.action_splashFragment_to_loginFragment)
     }

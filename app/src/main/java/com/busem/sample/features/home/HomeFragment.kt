@@ -17,7 +17,7 @@ class HomeFragment :
     BaseAbstractFragment<HomeViewModel, FragmentHomeBinding>(R.layout.fragment_home) {
 
     private val repositoriesAdapter by lazy {
-        RepositoriesAdapter(::toggleFavorite, ::toggleFavorite)
+        RepositoriesAdapter(::selectedRepo, ::toggleFavorite)
     }
 
     override fun setViewModel(): HomeViewModel =
@@ -82,6 +82,10 @@ class HomeFragment :
     }
 
     private fun toggleFavorite(data: Repository) {
+        viewModel.toggleFavorite(data)
+    }
+
+    private fun selectedRepo(data: Repository) {
         viewModel.toggleFavorite(data)
     }
 }

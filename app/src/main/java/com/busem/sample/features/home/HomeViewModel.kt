@@ -15,6 +15,10 @@ class HomeViewModel : BaseViewModel() {
     private val _repos by lazy { MutableLiveData<List<Repository>>() }
     val repos: LiveData<List<Repository>> by lazy { _repos }
 
+    init {
+        searchResults("")
+    }
+
     fun searchResults(searchTerm: String) {
         _searchTerm.postValue(searchTerm)
 
