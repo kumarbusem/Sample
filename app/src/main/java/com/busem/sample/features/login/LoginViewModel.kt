@@ -1,14 +1,12 @@
-package com.busem.sample.features.access.viewModels
+package com.busem.sample.features.login
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.busem.sample.common.BaseViewModel
-import com.busem.data.repositories.UserRepo
 import kotlinx.coroutines.launch
 
-class AccessViewModel : BaseViewModel() {
+class LoginViewModel : BaseViewModel() {
 
-    private val userRepo by lazy { UserRepo() }
 
     private val _userType by lazy { MutableLiveData<UserType>() }
     val userType: LiveData<UserType> by lazy { _userType }

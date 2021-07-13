@@ -1,16 +1,13 @@
-package com.busem.sample.features.splash.viewModels
+package com.busem.sample.features.splash
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.busem.sample.common.BaseViewModel
-import com.busem.data.repositories.UserRepo
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 
 class SplashViewModel : BaseViewModel() {
-
-    private val userRepo by lazy { UserRepo() }
 
     private val _navigateTo by lazy { MutableLiveData<NavDestination>() }
     val navigateTo: LiveData<NavDestination> by lazy { _navigateTo }
@@ -29,7 +26,6 @@ class SplashViewModel : BaseViewModel() {
             )
         }
     }
-
 
     companion object {
         private const val PURPOSEFUL_DELAY_MILLIS = 1_000L

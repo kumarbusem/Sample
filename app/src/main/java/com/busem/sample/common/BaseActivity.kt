@@ -4,8 +4,6 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.net.ConnectivityManager
-import android.net.NetworkInfo
 import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.fragment.app.FragmentActivity
@@ -79,9 +77,8 @@ abstract class BaseActivity<VM : BaseViewModel, VB : ViewBinding>(
 
         override fun onReceive(context: Context?, intent: Intent?) {
             context?.run {
-                val cm = this.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-                val activeNetwork: NetworkInfo? = cm.activeNetworkInfo
-                val isConnected: Boolean = activeNetwork?.isConnected == true
+
+                val isConnected: Boolean = isInternetAvailable(this)
 
                 getNetworkAvailability(isConnected)
                 isNetworkAvailable = isConnected
@@ -91,7 +88,7 @@ abstract class BaseActivity<VM : BaseViewModel, VB : ViewBinding>(
                 } else {
                     networkSnack?.dismiss()
                 }
-                cm
+
             }
         }
     }

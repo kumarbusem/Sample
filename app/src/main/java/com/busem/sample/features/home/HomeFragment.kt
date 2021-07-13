@@ -1,30 +1,30 @@
-package com.busem.sample.features.home.ui
+package com.busem.sample.features.home
 
-import android.content.Context
-import android.content.Intent
+import android.content.Context.INPUT_METHOD_SERVICE
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.core.view.isVisible
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
-import com.busem.sample.R
-import com.busem.sample.common.BaseActivity
-import com.busem.sample.common.toast
 import com.busem.data.models.Repository
-import com.busem.sample.databinding.ActivityHomeBinding
-import com.busem.sample.features.home.adapters.RepositoriesAdapter
-import com.busem.sample.features.home.viewModels.HomeViewModel
-import java.lang.ref.WeakReference
+import com.busem.sample.R
+import com.busem.sample.common.BaseAbstractFragment
+import com.busem.sample.common.ViewModelFactory
+import com.busem.sample.common.toast
+import com.busem.sample.databinding.FragmentHomeBinding
 
-class HomeActivity : BaseActivity<HomeViewModel, ActivityHomeBinding>(
-    HomeViewModel::class.java,
-    ActivityHomeBinding::inflate
-) {
+class HomeFragment :
+    BaseAbstractFragment<HomeViewModel, FragmentHomeBinding>(R.layout.fragment_home) {
 
     private val repositoriesAdapter by lazy {
         RepositoriesAdapter(::toggleFavorite, ::toggleFavorite)
     }
 
-    override fun ActivityHomeBinding.setupViews() {
+    override fun setViewModel(): HomeViewModel =
+        ViewModelProvider(this@HomeFragment, ViewModelFactory { HomeViewModel() })
+            .get(HomeViewModel::class.java)
+
+    override fun setupViews(): FragmentHomeBinding.() -> Unit = {
 
         fun setupRepoList() {
             rvRepositories.apply {
@@ -32,7 +32,7 @@ class HomeActivity : BaseActivity<HomeViewModel, ActivityHomeBinding>(
                 if (itemDecorationCount < 1) {
                     addItemDecoration(
                         DividerItemDecoration(
-                            this@HomeActivity,
+                            requireContext(),
                             DividerItemDecoration.HORIZONTAL
                         )
                     )
@@ -42,7 +42,7 @@ class HomeActivity : BaseActivity<HomeViewModel, ActivityHomeBinding>(
 
         fun setupSearch() {
             etSearchRepo.requestFocus()
-            etSearchRepo.setOnEditorActionListener { v, actionId, event ->
+            etSearchRepo.setOnEditorActionListener { _, actionId, _ ->
 
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
 
@@ -55,7 +55,7 @@ class HomeActivity : BaseActivity<HomeViewModel, ActivityHomeBinding>(
                     viewModel.searchResults(searchText)
 
                     val imm: InputMethodManager =
-                        getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                        requireActivity().getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
                     imm.hideSoftInputFromWindow(etSearchRepo.windowToken, 0)
 
                     return@setOnEditorActionListener true
@@ -67,33 +67,21 @@ class HomeActivity : BaseActivity<HomeViewModel, ActivityHomeBinding>(
 
         setupRepoList()
         setupSearch()
+
     }
 
-    override fun ActivityHomeBinding.observeViewModel() {
-        viewModel.apply {
-            repos.observe(this@HomeActivity) { repoList ->
-                tvNoResults.isVisible = repoList.isNullOrEmpty()
+    override fun setupObservers(): HomeViewModel.() -> Unit = {
 
-                repositoriesAdapter.submitList(repoList)
-                repositoriesAdapter.notifyDataSetChanged()
-            }
+        repos.observe(viewLifecycleOwner) { repoList ->
+            mBinding.tvNoResults.isVisible = repoList.isNullOrEmpty()
+
+            repositoriesAdapter.submitList(repoList)
+            repositoriesAdapter.notifyDataSetChanged()
         }
-    }
-
-
-    private fun navigateToDetails(data: Repository) {
 
     }
 
     private fun toggleFavorite(data: Repository) {
         viewModel.toggleFavorite(data)
-    }
-
-    companion object {
-
-        fun getIntent(context: WeakReference<Context>) = Intent(
-            context.get(),
-            HomeActivity::class.java
-        )
     }
 }

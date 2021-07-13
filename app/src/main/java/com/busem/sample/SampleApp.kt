@@ -13,7 +13,6 @@ class SampleApp : Application() {
 
     companion object {
         private var appContext: WeakReference<Context>? = null
-
         fun getAppContext() = appContext?.get() ?: throw RuntimeException("App context not found.")
     }
 }

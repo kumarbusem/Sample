@@ -1,4 +1,4 @@
-package com.busem.sample.features.home.adapters
+package com.busem.sample.features.home
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

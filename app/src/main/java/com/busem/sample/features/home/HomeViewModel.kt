@@ -1,19 +1,14 @@
-package com.busem.sample.features.home.viewModels
+package com.busem.sample.features.home
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.busem.data.common.DataState
 import com.busem.data.models.Repository
-import com.busem.data.repositories.GithubRepo
 import com.busem.sample.common.BaseViewModel
 import com.busem.sample.common.SingleLiveEvent
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class HomeViewModel : BaseViewModel() {
-
-    private val githubRepo by lazy { GithubRepo() }
 
     private val _searchTerm by lazy { SingleLiveEvent<String>() }
 
@@ -28,8 +23,11 @@ class HomeViewModel : BaseViewModel() {
                 is DataState.Success -> {
                     _repos.postValue(dataState.data)
                 }
-                is DataState.Error ->{
+                is DataState.Error -> {
                     _repos.postValue(githubRepo.getRepositories(searchTerm))
+                }
+                is DataState.Loading ->{
+
                 }
             }
         }
