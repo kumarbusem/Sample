@@ -4,40 +4,38 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.LayoutRes
-import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
+import androidx.lifecycle.ViewModelProviders
 import com.busem.sample.BR
 
-abstract class BaseAbstractFragment<VT : BaseViewModel, BT : ViewDataBinding>
-    (@LayoutRes private val layoutId: Int) : BaseFragment() {
 
-    protected lateinit var mBinding: BT
-    protected val viewModel: VT by lazy { setViewModel() }
+abstract class BaseAbstractFragment<VT : BaseViewModel, BT : ViewDataBinding>(
+    viewModelClass: Class<VT>,
+    private val inflate: Inflate<BT>
+) : BaseFragment() {
+
+    protected lateinit var binding: BT
+    protected val viewModel: VT by lazy { ViewModelProviders.of(this)[viewModelClass] }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        mBinding = DataBindingUtil.inflate(inflater, layoutId, container, false)
-        mBinding.apply {
+        binding = inflate.invoke(layoutInflater)
+        binding.apply {
             lifecycleOwner = viewLifecycleOwner
             setVariable(BR.mViewModel, viewModel)
         }
-        viewModel.apply {
-            setupObservers().invoke(viewModel)
-            obsToastMessage.observe(viewLifecycleOwner) { showToast(it) }
-        }
-        return mBinding.root
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mBinding.apply { setupViews().invoke(mBinding) }
+        binding.apply { setupViews().invoke(binding) }
+        viewModel.apply { setupObservers().invoke(viewModel) }
     }
 
-    abstract fun setViewModel(): VT
     abstract fun setupViews(): BT.() -> Unit
     abstract fun setupObservers(): VT.() -> Unit
 }

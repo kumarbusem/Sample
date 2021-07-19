@@ -1,19 +1,17 @@
 package com.busem.sample.features.login
 
 import androidx.core.widget.doAfterTextChanged
-import androidx.lifecycle.ViewModelProvider
 import com.busem.sample.R
 import com.busem.sample.common.BaseAbstractFragment
-import com.busem.sample.common.ViewModelFactory
 import com.busem.sample.common.toast
 import com.busem.sample.databinding.FragmentLoginBinding
 
 class LoginFragment :
-    BaseAbstractFragment<LoginViewModel, FragmentLoginBinding>(R.layout.fragment_login) {
+    BaseAbstractFragment<LoginViewModel, FragmentLoginBinding>(
+        LoginViewModel::class.java,
+        FragmentLoginBinding::inflate,
+    ) {
 
-    override fun setViewModel(): LoginViewModel =
-        ViewModelProvider(this@LoginFragment, ViewModelFactory { LoginViewModel() })
-            .get(LoginViewModel::class.java)
 
     override fun setupViews(): FragmentLoginBinding.() -> Unit = {
         fun setupFields() {
