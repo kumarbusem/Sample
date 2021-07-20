@@ -1,36 +1,29 @@
 package com.busem.data.repositories
 
-import android.provider.ContactsContract
-import android.service.autofill.Dataset
-import com.busem.data.common.ApiException
 import com.busem.data.common.DataState
 import com.busem.data.common.EMPTY_STRING
-import com.busem.data.common.UnauthorizedException
 import com.busem.data.local.dataSources.LocalGitDataSourceImpl
 import com.busem.data.models.RemoteRepository
 import com.busem.data.models.Repository
 import com.busem.data.remote.RetrofitDataSourceImpl
-import java.lang.Exception
-import java.net.SocketTimeoutException
+import com.busem.data.util.wrapAsDataState
 
 class GithubRepo {
 
     private val cache = LocalGitDataSourceImpl()
     private val remote = RetrofitDataSourceImpl()
 
-    suspend fun fetchRepositories(searchKey: String): DataState<List<Repository>?> {
+    suspend fun fetchRepositories(searchKey: String):
+            DataState<List<Repository>?> = wrapAsDataState {
 
-        return when(val result = remote.getRepositories(searchKey)){
-            is DataState.Success -> {
-                cache.saveRepositories(mapFromRemoteList(result.data?.repositories!!))
-                DataState.Success(cache.getRepositories(searchKey))
-            }
-            is DataState.ApiError -> DataState.ApiError(result.message)
-            is DataState.Error -> DataState.Error(result.throwable, result.errorMessage)
-            is DataState.InvalidData -> DataState.InvalidData(result.message)
-            is DataState.NetworkException -> DataState.NetworkException(result.message)
-            is DataState.UnauthorizedException -> DataState.UnauthorizedException(result.message)
+        val repositoriesResponseBody = remote.getRepositoriesTest(searchKey)
+
+        if (repositoriesResponseBody != null) {
+            val mapped = mapFromRemoteList(repositoriesResponseBody.repositories)
+            cache.saveRepositories(mapped)
         }
+
+        cache.getRepositories(searchKey)
     }
 
     fun getRepositories(searchKey: String): List<Repository> =
