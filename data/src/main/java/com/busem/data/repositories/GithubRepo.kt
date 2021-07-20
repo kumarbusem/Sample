@@ -18,28 +18,19 @@ class GithubRepo {
     private val cache = LocalGitDataSourceImpl()
     private val remote = RetrofitDataSourceImpl()
 
-    suspend fun fetchRepositories(searchKey: String): DataState<List<Repository>?>? {
+    suspend fun fetchRepositories(searchKey: String): DataState<List<Repository>?> {
 
-        return try {
-            val repositoriesResponseBody = remote.getRepositories(searchKey)
-
-            if(repositoriesResponseBody != null){
-                cache.saveRepositories(mapFromRemoteList(repositoriesResponseBody.repositories))
+        return when(val result = remote.getRepositories(searchKey)){
+            is DataState.Success -> {
+                cache.saveRepositories(mapFromRemoteList(result.data?.repositories!!))
                 DataState.Success(cache.getRepositories(searchKey))
-            }else{
-                DataState.InvalidData("Data Not Available")
             }
-
-        } catch(e: UnauthorizedException){
-            DataState.UnauthorizedException("Please Login Again")
-        } catch(e: SocketTimeoutException){
-            DataState.NetworkException("Slow Network")
-        } catch(e: ApiException) {
-            DataState.ApiError(e.message!!)
-        } catch (e: Exception){
-            DataState.Error(e.cause!!, e.message)
+            is DataState.ApiError -> DataState.ApiError(result.message)
+            is DataState.Error -> DataState.Error(result.throwable, result.errorMessage)
+            is DataState.InvalidData -> DataState.InvalidData(result.message)
+            is DataState.NetworkException -> DataState.NetworkException(result.message)
+            is DataState.UnauthorizedException -> DataState.UnauthorizedException(result.message)
         }
-
     }
 
     fun getRepositories(searchKey: String): List<Repository> =
