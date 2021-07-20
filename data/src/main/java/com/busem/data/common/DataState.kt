@@ -11,32 +11,58 @@ sealed class DataState<T> {
         val data: T
     ) : DataState<T>()
 
-    data class Loading<T> internal constructor(
-        val message: T
+    data class InvalidData<T> internal constructor(
+        val message: String
     ) : DataState<T>()
+
+    data class ApiError<T> internal constructor(
+        val message: String
+    ) : DataState<T>()
+
+    data class NetworkException<T> internal constructor(
+        val message: String
+    ) : DataState<T>()
+
+    data class UnauthorizedException<T> internal constructor(
+        val message: String
+    ) : DataState<T>()
+
+
 
     fun getOrNull(): T? = when (this) {
         is Error -> null
         is Success -> data
-        is Loading -> message
+        is ApiError -> TODO()
+        is InvalidData -> TODO()
+        is NetworkException -> TODO()
+        is UnauthorizedException -> TODO()
     }
 
     fun getOrThrow(): T = when (this) {
         is Error -> throw throwable
         is Success -> data
-        is Loading -> message
+        is ApiError -> TODO()
+        is InvalidData -> TODO()
+        is NetworkException -> TODO()
+        is UnauthorizedException -> TODO()
     }
 
     fun exceptionOrNull(): Throwable? = when (this) {
         is Error -> throwable
         is Success -> null
-        is Loading -> null
+        is ApiError -> TODO()
+        is InvalidData -> TODO()
+        is NetworkException -> TODO()
+        is UnauthorizedException -> TODO()
     }
 
     override fun toString(): String = when (this) {
         is Error -> "QueryResult.Error(errorMessage:${errorMessage}, throwable:${throwable})"
         is Success -> "QueryResult.Success(data:${data.toString()})"
-        is Loading -> "QueryResult.Loading(message:${message.toString()})"
+        is ApiError -> TODO()
+        is InvalidData -> TODO()
+        is NetworkException -> TODO()
+        is UnauthorizedException -> TODO()
     }
 
     @PublishedApi

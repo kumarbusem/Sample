@@ -2,10 +2,14 @@ package com.busem.data.remote
 
 import com.busem.data.common.QUERY_PARAMETER_KEY
 import com.busem.data.models.RemoteRepository
+import com.busem.data.models.Repository
 import com.google.gson.annotations.SerializedName
 import io.reactivex.Observable
+import okhttp3.RequestBody
 import retrofit2.Response
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Query
 
 /**
@@ -14,7 +18,9 @@ import retrofit2.http.Query
 interface GithubService {
 
     @GET("search/repositories")
-    suspend fun getRepositories(@Query(QUERY_PARAMETER_KEY) q: String): RepositoriesResponseBody?
+    suspend fun getRepositories(
+        @Query(QUERY_PARAMETER_KEY) q: String
+    ): Response<RepositoriesResponseBody>
 }
 
 

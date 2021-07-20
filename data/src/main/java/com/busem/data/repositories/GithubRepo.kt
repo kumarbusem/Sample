@@ -1,11 +1,17 @@
 package com.busem.data.repositories
 
+import android.provider.ContactsContract
+import android.service.autofill.Dataset
+import com.busem.data.common.ApiException
 import com.busem.data.common.DataState
 import com.busem.data.common.EMPTY_STRING
+import com.busem.data.common.UnauthorizedException
 import com.busem.data.local.dataSources.LocalGitDataSourceImpl
 import com.busem.data.models.RemoteRepository
 import com.busem.data.models.Repository
 import com.busem.data.remote.RetrofitDataSourceImpl
+import java.lang.Exception
+import java.net.SocketTimeoutException
 
 class GithubRepo {
 
@@ -16,14 +22,22 @@ class GithubRepo {
 
         return try {
             val repositoriesResponseBody = remote.getRepositories(searchKey)
-                ?: throw Exception("Null Response")
 
-            cache.saveRepositories(mapFromRemoteList(repositoriesResponseBody.repositories))
+            if(repositoriesResponseBody != null){
+                cache.saveRepositories(mapFromRemoteList(repositoriesResponseBody.repositories))
+                DataState.Success(cache.getRepositories(searchKey))
+            }else{
+                DataState.InvalidData("Data Not Available")
+            }
 
-            DataState.Success(cache.getRepositories(searchKey))
-
-        } catch (e: Exception) {
-            DataState.Error(Throwable(), e.toString())
+        } catch(e: UnauthorizedException){
+            DataState.UnauthorizedException("Please Login Again")
+        } catch(e: SocketTimeoutException){
+            DataState.NetworkException("Slow Network")
+        } catch(e: ApiException) {
+            DataState.ApiError(e.message!!)
+        } catch (e: Exception){
+            DataState.Error(e.cause!!, e.message)
         }
 
     }
@@ -52,11 +66,8 @@ class GithubRepo {
         )
     }
 
-    fun mapFromRemoteList(remoteEntities: List<RemoteRepository>): List<Repository> {
+    private fun mapFromRemoteList(remoteEntities: List<RemoteRepository>): List<Repository> {
         return remoteEntities.map { mapFromRemoteToEntity(it) }
     }
 
-    companion object {
-        val TAG: String = GithubRepo::class.java.simpleName
-    }
 }

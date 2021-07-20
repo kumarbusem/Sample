@@ -1,5 +1,6 @@
 package com.busem.sample.features.home
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.busem.data.common.DataState
@@ -8,7 +9,7 @@ import com.busem.sample.common.BaseViewModel
 import com.busem.sample.common.SingleLiveEvent
 import kotlinx.coroutines.launch
 
-class HomeViewModel : BaseViewModel() {
+class HomeViewModel : BaseViewModel(){
 
     private val _searchTerm by lazy { SingleLiveEvent<String>() }
 
@@ -16,7 +17,7 @@ class HomeViewModel : BaseViewModel() {
     val repos: LiveData<List<Repository>> by lazy { _repos }
 
     init {
-        searchResults("")
+        searchResults("Top")
     }
 
     fun searchResults(searchTerm: String) {
@@ -24,15 +25,11 @@ class HomeViewModel : BaseViewModel() {
 
         ioScope.launch {
             when (val dataState = githubRepo.fetchRepositories(searchTerm)) {
-                is DataState.Success -> {
-                    _repos.postValue(dataState.data)
-                }
-                is DataState.Error -> {
-                    _repos.postValue(githubRepo.getRepositories(searchTerm))
-                }
-                is DataState.Loading ->{
-
-                }
+                is DataState.Success -> _repos.postValue(dataState.data)
+                is DataState.Error -> _repos.postValue(githubRepo.getRepositories(searchTerm))
+                is DataState.ApiError -> _repos.postValue(githubRepo.getRepositories(searchTerm))
+                is DataState.NetworkException -> _repos.postValue(githubRepo.getRepositories(searchTerm))
+                is DataState.UnauthorizedException -> _repos.postValue(githubRepo.getRepositories(searchTerm))
             }
         }
     }
