@@ -12,4 +12,8 @@ class RetrofitDataSourceImpl : RemoteGitDataSource, SafeApiRequest() {
         return apiRequest { service.getRepositories(searchKey) }
     }
 
+     suspend fun getRepositoriesTest(searchKey: String): RepositoriesResponseBody? {
+        return apiRequest { service.getRepositories(searchKey) }.getOrNull()
+    }
+
 }
