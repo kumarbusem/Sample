@@ -3,11 +3,15 @@ package com.busem.sample.features.home
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.busem.data.common.ApiException
 import com.busem.data.common.DataState
+import com.busem.data.common.UnauthorizedException
 import com.busem.data.models.Repository
+import com.busem.data.util.DataException
 import com.busem.sample.common.BaseViewModel
 import com.busem.sample.common.SingleLiveEvent
 import kotlinx.coroutines.launch
+import java.net.SocketTimeoutException
 
 class HomeViewModel : BaseViewModel(){
 
@@ -26,10 +30,14 @@ class HomeViewModel : BaseViewModel(){
         ioScope.launch {
             when (val dataState = githubRepo.fetchRepositories(searchTerm)) {
                 is DataState.Success -> _repos.postValue(dataState.data)
-                is DataState.Error -> _repos.postValue(githubRepo.getRepositories(searchTerm))
-                is DataState.ApiError -> _repos.postValue(githubRepo.getRepositories(searchTerm))
-                is DataState.NetworkException -> _repos.postValue(githubRepo.getRepositories(searchTerm))
-                is DataState.UnauthorizedException -> _repos.postValue(githubRepo.getRepositories(searchTerm))
+                is DataState.Error -> {
+                    when(dataState.throwable){
+                        is ApiException -> _repos.postValue(githubRepo.getRepositories(searchTerm))
+                        is UnauthorizedException -> _repos.postValue(githubRepo.getRepositories(searchTerm))
+                        is SocketTimeoutException -> _repos.postValue(githubRepo.getRepositories(searchTerm))
+                    }
+                    Log.e("ERROR::", "${dataState.errorMessage},\n${dataState.throwable}")
+                }
             }
         }
     }

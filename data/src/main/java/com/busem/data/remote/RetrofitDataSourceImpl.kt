@@ -8,12 +8,9 @@ class RetrofitDataSourceImpl : RemoteGitDataSource, SafeApiRequest() {
 
     private val service = ServiceProvider.getInstance().create(GithubService::class.java)
 
-    override suspend fun getRepositories(searchKey: String): DataState<RepositoriesResponseBody?> {
+    override suspend fun getRepositories(searchKey: String): RepositoriesResponseBody? {
         return apiRequest { service.getRepositories(searchKey) }
     }
 
-     suspend fun getRepositoriesTest(searchKey: String): RepositoriesResponseBody? {
-        return apiRequest { service.getRepositories(searchKey) }.getOrNull()
-    }
 
 }

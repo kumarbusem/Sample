@@ -6,7 +6,6 @@ import com.busem.data.local.dataSources.LocalGitDataSourceImpl
 import com.busem.data.models.RemoteRepository
 import com.busem.data.models.Repository
 import com.busem.data.remote.RetrofitDataSourceImpl
-import com.busem.data.util.wrapAsDataState
 
 class GithubRepo {
 
@@ -14,9 +13,9 @@ class GithubRepo {
     private val remote = RetrofitDataSourceImpl()
 
     suspend fun fetchRepositories(searchKey: String):
-            DataState<List<Repository>?> = wrapAsDataState {
+            DataState<List<Repository>?> = DataState.asDataState {
 
-        val repositoriesResponseBody = remote.getRepositoriesTest(searchKey)
+        val repositoriesResponseBody = remote.getRepositories(searchKey)
 
         if (repositoriesResponseBody != null) {
             val mapped = mapFromRemoteList(repositoriesResponseBody.repositories)
