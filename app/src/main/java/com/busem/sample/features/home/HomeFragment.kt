@@ -7,24 +7,24 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.busem.data.models.Repository
-import com.busem.sample.MainViewModel
 import com.busem.sample.R
 import com.busem.sample.common.BaseAbstractFragment
 import com.busem.sample.common.ViewModelFactory
 import com.busem.sample.common.toast
-import com.busem.sample.databinding.ActivityMainBinding
 import com.busem.sample.databinding.FragmentHomeBinding
 
-class HomeFragment :
-    BaseAbstractFragment<HomeViewModel, FragmentHomeBinding>(
-        HomeViewModel::class.java,
-        FragmentHomeBinding::inflate
-    ) {
+class HomeFragment : BaseAbstractFragment<HomeViewModel, FragmentHomeBinding>(
+    FragmentHomeBinding::inflate
+) {
 
     private val repositoriesAdapter by lazy {
         RepositoriesAdapter(::selectedRepo, ::toggleFavorite)
     }
 
+    override fun setViewModel(): HomeViewModel =
+        ViewModelProvider(this@HomeFragment, ViewModelFactory {
+            HomeViewModel()
+        }).get(HomeViewModel::class.java)
 
     override fun setupViews(): FragmentHomeBinding.() -> Unit = {
 
@@ -90,4 +90,5 @@ class HomeFragment :
     private fun selectedRepo(data: Repository) {
         viewModel.toggleFavorite(data)
     }
+
 }

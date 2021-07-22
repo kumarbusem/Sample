@@ -1,15 +1,20 @@
 package com.busem.sample.features.splash
 
+import androidx.lifecycle.ViewModelProvider
 import com.busem.sample.R
 import com.busem.sample.common.BaseAbstractFragment
+import com.busem.sample.common.ViewModelFactory
 import com.busem.sample.common.toast
 import com.busem.sample.databinding.FragmentSplashBinding
 
 class SplashFragment : BaseAbstractFragment<SplashViewModel, FragmentSplashBinding>(
-    SplashViewModel::class.java,
     FragmentSplashBinding::inflate,
 ) {
 
+    override fun setViewModel(): SplashViewModel =
+        ViewModelProvider(this@SplashFragment, ViewModelFactory {
+            SplashViewModel()
+        }).get(SplashViewModel::class.java)
 
     override fun setupViews(): FragmentSplashBinding.() -> Unit = {
         viewModel.checkAndNavigate()

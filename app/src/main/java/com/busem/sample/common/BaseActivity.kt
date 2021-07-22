@@ -13,7 +13,6 @@ import com.busem.sample.R
 import com.google.android.material.snackbar.Snackbar
 
 abstract class BaseActivity<VM : BaseViewModel, VB : ViewBinding>(
-    viewModelClass: Class<VM>,
     private val inflate: Inflate<VB>
 ) : FragmentActivity() {
 
@@ -29,31 +28,26 @@ abstract class BaseActivity<VM : BaseViewModel, VB : ViewBinding>(
      * of the network connectivity.
      */
     val networkSnack by lazy {
-        binding?.root?.snack(getString(R.string.no_inter_msg), Snackbar.LENGTH_INDEFINITE)
+        binding.root.snack(getString(R.string.no_inter_msg), Snackbar.LENGTH_INDEFINITE)
     }
 
-    private var binding: VB? = null
+    private lateinit var binding: VB
 
-    protected val viewModel: VM by lazy { ViewModelProviders.of(this)[viewModelClass] }
+    protected val viewModel: VM by lazy { setViewModel() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = inflate.invoke(layoutInflater)
-        binding?.apply {
+        binding.apply {
             setContentView(root)
-            setupViews()
-            observeViewModel()
+            setupViews().invoke(binding)
         }
+        viewModel.apply { setupObservers().invoke(viewModel) }
     }
 
-    open fun VB.setupViews() {}
-
-    open fun VB.observeViewModel() {}
-
-    /**
-     * Function to notify the current state of the network connectivity.
-     */
-    open fun getNetworkAvailability(isConnected: Boolean) {}
+    abstract fun setViewModel(): VM
+    abstract fun setupViews(): VB.() -> Unit
+    abstract fun setupObservers(): VM.() -> Unit
 
     override fun onResume() {
         super.onResume()
@@ -78,15 +72,12 @@ abstract class BaseActivity<VM : BaseViewModel, VB : ViewBinding>(
         override fun onReceive(context: Context?, intent: Intent?) {
             context?.run {
 
-                val isConnected: Boolean = isInternetAvailable(this)
+                isNetworkAvailable = isInternetAvailable(this)
 
-                getNetworkAvailability(isConnected)
-                isNetworkAvailable = isConnected
-
-                if (!isConnected) {
-                    networkSnack?.show()
+                if (!isNetworkAvailable) {
+                    networkSnack.show()
                 } else {
-                    networkSnack?.dismiss()
+                    networkSnack.dismiss()
                 }
 
             }

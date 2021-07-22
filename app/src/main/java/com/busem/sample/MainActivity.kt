@@ -1,21 +1,23 @@
 package com.busem.sample
 
+import androidx.lifecycle.ViewModelProvider
 import com.busem.sample.common.BaseActivity
+import com.busem.sample.common.ViewModelFactory
 import com.busem.sample.databinding.ActivityMainBinding
 
 class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(
-    MainViewModel::class.java,
     ActivityMainBinding::inflate
 ) {
+    override fun setViewModel(): MainViewModel =
+        ViewModelProvider(this@MainActivity, ViewModelFactory {
+            MainViewModel()
+        }).get(MainViewModel::class.java)
 
-    override fun ActivityMainBinding.setupViews() {
+    override fun setupViews(): ActivityMainBinding.() -> Unit = {
 
     }
 
-    override fun ActivityMainBinding.observeViewModel() {
-        viewModel.apply {
+    override fun setupObservers(): MainViewModel.() -> Unit = {
 
-        }
     }
-
 }
