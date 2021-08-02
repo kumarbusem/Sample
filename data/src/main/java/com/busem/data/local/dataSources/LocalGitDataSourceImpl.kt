@@ -1,6 +1,6 @@
 package com.busem.data.local.dataSources
 
-import com.busem.data.local.CacheProvider
+import com.busem.data.local.roomDatabase.CacheProvider
 import com.busem.data.models.Repository
 
 class LocalGitDataSourceImpl : LocalGitDataSource {

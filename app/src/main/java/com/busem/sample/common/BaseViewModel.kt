@@ -1,9 +1,9 @@
 package com.busem.sample.common
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.busem.data.repositories.GithubRepo
-import com.busem.data.repositories.UserRepo
+import com.busem.data.common.DataState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -15,7 +15,12 @@ import kotlinx.coroutines.SupervisorJob
 
 abstract class BaseViewModel : ViewModel() {
 
+
+    @Suppress("PropertyName")
+    protected val TAG: String by lazy { javaClass.simpleName }
+
     val obsIsDataLoading: MutableLiveData<Boolean> = MutableLiveData()
+
     val obsToastMessage by lazy { SingleLiveEvent<String>() }
 
     /*
@@ -33,8 +38,19 @@ abstract class BaseViewModel : ViewModel() {
      */
     val ioScope = CoroutineScope(job + Dispatchers.IO)
 
-    protected val userRepo by lazy { UserRepo() }
-    protected val githubRepo by lazy { GithubRepo() }
+    protected inline fun <reified T> DataState<T>.logDetails(): DataState<T> {
+        this.exceptionOrNull()?.let {
+            Log.e(TAG, "Failed to fetch response : ${it.message}")
+            Log.e(TAG, it.stackTraceToString())
+        }
+        return this
+    }
+
+    protected suspend fun doWhileLoading(logic: suspend () -> Unit) {
+        obsIsDataLoading.postValue(true)
+        logic()
+        obsIsDataLoading.postValue(false)
+    }
 
     override fun onCleared() {
         super.onCleared()

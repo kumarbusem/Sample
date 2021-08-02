@@ -6,6 +6,6 @@ import com.busem.data.models.RemoteRepository
 
 interface RemoteGitDataSource {
 
-    suspend fun getRepositories(searchKey: String): RepositoriesResponseBody?
+    suspend fun fetchRepositories(searchKey: String): RepositoriesResponseBody?
 
 }

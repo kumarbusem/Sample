@@ -1,6 +1,7 @@
 package com.busem.data.remote
 
 import android.content.Context
+import androidx.annotation.Keep
 import com.busem.data.common.BASE_URL
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -25,7 +26,7 @@ object ServiceProvider {
 
     private var setup: Retrofit? = null
 
-    fun initialize(context: Context) {
+    fun initialize() {
         if (setup == null) {
             setup =  Retrofit.Builder()
                 .baseUrl(BASE_URL)

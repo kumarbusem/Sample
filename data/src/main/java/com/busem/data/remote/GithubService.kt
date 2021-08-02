@@ -17,8 +17,8 @@ import retrofit2.http.Query
  */
 interface GithubService {
 
-    @GET("search/repositorie")
-    suspend fun getRepositories(
+    @GET("search/repositories")
+    suspend fun fetchRepositories(
         @Query(QUERY_PARAMETER_KEY) q: String
     ): Response<RepositoriesResponseBody>
 }

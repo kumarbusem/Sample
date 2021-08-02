@@ -1,4 +1,4 @@
-package com.busem.data.local
+package com.busem.data.local.roomDatabase
 
 import android.content.Context
 import androidx.room.Room
@@ -23,7 +23,7 @@ object CacheProvider {
     }
 
     fun getInstance(): GithubDatabase {
-        checkNotNull(setup) { "SharedPreferences not initialized" }
+        checkNotNull(setup) { "GithubDatabase not initialized" }
         return setup!!
     }
 

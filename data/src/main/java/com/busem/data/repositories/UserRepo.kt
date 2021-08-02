@@ -1,11 +1,12 @@
 package com.busem.data.repositories
 
+import com.busem.data.local.dataSources.UserDataSource
 import com.busem.data.local.dataSources.UserDataSourceImpl
 import com.busem.data.models.User
 
-class UserRepo : UserRepository {
+class UserRepo : DataSourceUserRepo {
 
-    private val dataSource by lazy { UserDataSourceImpl() }
+    private val dataSource: UserDataSource by lazy { UserDataSourceImpl() }
 
     override suspend fun saveUser(username: String, password: String) {
         dataSource.saveUser(username, password)

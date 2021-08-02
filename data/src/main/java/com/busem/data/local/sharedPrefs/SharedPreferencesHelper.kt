@@ -1,11 +1,11 @@
-package com.busem.data.sharedPrefs
+package com.busem.data.local.sharedPrefs
 
 import android.content.Context
 import android.content.SharedPreferences
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
-internal class SharedPreferenceHelper private constructor(context: Context) {
+internal class SharedPreferencesHelper private constructor(context: Context) {
 
     val mGson: Gson by lazy { Gson() }
 
@@ -76,15 +76,15 @@ internal class SharedPreferenceHelper private constructor(context: Context) {
 
     companion object {
 
-        private var instance: SharedPreferenceHelper? = null
+        private var instance: SharedPreferencesHelper? = null
 
         fun initialize(context: Context) {
             if (instance == null) {
-                instance = SharedPreferenceHelper(context)
+                instance = SharedPreferencesHelper(context)
             }
         }
 
-        fun getInstance(): SharedPreferenceHelper {
+        fun getInstance(): SharedPreferencesHelper {
             checkNotNull(instance) { "SharedPreferences not initialized" }
             return instance!!
         }

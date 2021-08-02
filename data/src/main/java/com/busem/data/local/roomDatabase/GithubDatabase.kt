@@ -1,4 +1,4 @@
-package com.busem.data.local
+package com.busem.data.local.roomDatabase
 
 import androidx.room.Database
 import androidx.room.RoomDatabase

@@ -1,12 +1,10 @@
-package com.busem.data.sharedPrefs
+package com.busem.data.local.sharedPrefs
 
-import com.busem.data.local.CacheProvider
-import com.busem.data.models.Repository
 import com.busem.data.models.User
 
 class SharedPreferencesDataSourceImpl : SharedPreferencesDataSource {
 
-    private val mSpHelper: SharedPreferenceHelper by lazy { SharedPreferenceHelper.getInstance() }
+    private val mSpHelper: SharedPreferencesHelper by lazy { SharedPreferencesHelper.getInstance() }
     override fun saveUser(user: User) = mSpHelper.putObject(SP_USER, user)
 
     override fun getUser(): User? = mSpHelper.getObject(SP_USER)
@@ -16,7 +14,6 @@ class SharedPreferencesDataSourceImpl : SharedPreferencesDataSource {
     override fun deleteAllPrefs() = mSpHelper.clear()
 
     companion object {
-
         private const val SP_USER: String = "SP_LOGGED_IN_USER"
     }
 

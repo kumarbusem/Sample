@@ -2,12 +2,16 @@ package com.busem.sample.features.splash
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.busem.data.repositories.DataSourceUserRepo
+import com.busem.data.repositories.UserRepo
 import com.busem.sample.common.BaseViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 
-class SplashViewModel : BaseViewModel() {
+class SplashViewModel(
+    private val userRepo: DataSourceUserRepo = UserRepo()
+)  : BaseViewModel() {
 
     private val _navigateTo by lazy { MutableLiveData<NavDestination>() }
     val navigateTo: LiveData<NavDestination> by lazy { _navigateTo }

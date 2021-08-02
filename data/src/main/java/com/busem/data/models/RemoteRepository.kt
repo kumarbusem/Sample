@@ -1,5 +1,6 @@
 package com.busem.data.models
 
+import com.busem.data.common.EMPTY_STRING
 import com.google.gson.annotations.SerializedName
 
 data class RemoteRepository(
@@ -32,5 +33,7 @@ data class RemoteRepository(
         const val HAS_PROJECTS = "has_projects"
         const val HAS_DOWNLOADS = "has_downloads"
         const val HAS_WIKI = "has_wiki"
+
+
     }
 }

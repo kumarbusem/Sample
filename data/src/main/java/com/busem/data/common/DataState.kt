@@ -1,9 +1,9 @@
 package com.busem.data.common
 
-sealed class DataState<T> {
+public sealed class DataState<T> {
 
     data class Error<T> internal constructor(
-        val throwable: Throwable,
+        val dataException: DataException,
         val errorMessage: String?,
     ) : DataState<T>()
 
@@ -18,17 +18,17 @@ sealed class DataState<T> {
     }
 
     fun getOrThrow(): T = when (this) {
-        is Error -> throw throwable
+        is Error -> throw dataException
         is Success -> data
     }
 
-    fun exceptionOrNull(): Throwable? = when (this) {
-        is Error -> throwable
+    fun exceptionOrNull(): DataException? = when (this) {
+        is Error -> dataException
         is Success -> null
     }
 
     override fun toString(): String = when (this) {
-        is Error -> "QueryResult.Error(errorMessage:${errorMessage}, throwable:${throwable})"
+        is Error -> "QueryResult.Error(errorMessage:${errorMessage}, throwable:${dataException})"
         is Success -> "QueryResult.Success(data:${data.toString()})"
     }
 
@@ -38,9 +38,9 @@ sealed class DataState<T> {
         fun <T> success(data: T): Success<T> = Success(data = data)
 
         fun <T> error(
-            throwable: Throwable,
+            throwable: DataException,
             message: String? = null,
-        ): Error<T> = Error(throwable = throwable, errorMessage = message)
+        ): Error<T> = Error(dataException = throwable, errorMessage = message)
 
         suspend inline fun <T> asDataState(
             crossinline logic: suspend () -> T
@@ -49,7 +49,7 @@ sealed class DataState<T> {
             val result = kotlin.runCatching { logic() }
 
             return result.exceptionOrNull()
-                ?.let { ex -> error(throwable = ex) }
+                ?.let { ex -> error(throwable = ex as DataException) }
                 ?: run { success(result.getOrThrow()) }
         }
     }

@@ -1,4 +1,4 @@
-package com.busem.data.sharedPrefs
+package com.busem.data.local.sharedPrefs
 
 import com.busem.data.models.User
 

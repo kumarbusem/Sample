@@ -2,7 +2,7 @@ package com.busem.data.repositories
 
 import com.busem.data.models.User
 
-interface UserRepository {
+interface DataSourceUserRepo {
 
     suspend fun saveUser(username: String, password: String)
 
