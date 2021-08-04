@@ -17,11 +17,13 @@ class LoginFragment : BaseAbstractFragment<LoginViewModel, FragmentLoginBinding>
             LoginViewModel()
         }).get(LoginViewModel::class.java)
 
+
     override fun setupViews(): FragmentLoginBinding.() -> Unit = {
         fun setupFields() {
             etUsername.doAfterTextChanged { etUsername.error = null }
             etPassword.doAfterTextChanged { etPassword.error = null }
         }
+
 
         fun setupGitIn() {
 
